@@ -20,9 +20,9 @@ resource "aws_launch_configuration" "example-config" {
     instance_type   = "t2.micro"
     security_groups = [aws_security_group.instance.id]
 
-    user_data = <<EOF
+    user_data = <<-EOF
                 #!/bin/bash
-                echo "hello there, fancy a burger?" > index.html
+                echo "hello there fancy a burger" > index.html
                 nohup busybox httpd -f -p ${var.server_port} &
                 EOF
 
