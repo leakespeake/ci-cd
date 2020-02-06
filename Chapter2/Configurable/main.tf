@@ -20,6 +20,7 @@ resource "aws_instance" "example" {
     vpc_security_group_ids  = [aws_security_group.instance.id]
 
 # Pass a shell script to User Data to write Hello World into index.html then use busybox to launch a webserver on 8080 to serve it
+# Uses Terraforms HEREDOC SYNTAX of <<-EOF and EOF to create multi line strings without inserting newline characters
     user_data = <<-EOF
                 #!/bin/bash
                 echo "Hello World" > index.html

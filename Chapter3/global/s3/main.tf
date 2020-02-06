@@ -9,6 +9,7 @@ provider "aws" {
     version = "~> 2.0"
 }
 
+# Create the S3 BUCKET
 resource "aws_s3_bucket" "terraform_state" {
     bucket = var.bucket_name
 
