@@ -40,6 +40,7 @@ Enter passphrase:		    Enter (blank)
 We finish with;
 
 ~/.ssh/EC2/id_rsa		    (private key - must rename to .pem)
+
 ~/.ssh/EC2/id_rsa.pub		(public key - for upload to AWS)
 
 Rename id_rsa to id_rsa.pem
