@@ -32,7 +32,9 @@ ssh-keygen -t rsa -b 2048
 ```
 
 set key location as:		/c/Users/username/.ssh/EC2/id_rsa
+
 Enter passphrase:		    Enter (blank)
+
 Enter passphrase:		    Enter (blank)
 
 We finish with;
@@ -89,6 +91,8 @@ ssh -i ~/.ssh/EC2/id_rsa.pem -v ubuntu@ec2-3-15-163-63.us-east-2.compute.amazona
 
 ssh -i ~/.ssh/EC2/id_rsa.pem ubuntu@ec2-3-21-165-238.us-east-2.compute.amazonaws.com lsb_release -a
 ```
+
+___
 
 **Key pair tests**
 
