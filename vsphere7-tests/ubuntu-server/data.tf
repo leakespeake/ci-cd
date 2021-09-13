@@ -1,6 +1,6 @@
 # Lookup the datacenter
 data "vsphere_datacenter" "dc" {
-  name          = var.datacenter
+  name = var.datacenter
 }
 
 # Lookup the datastore within the elected datacenter

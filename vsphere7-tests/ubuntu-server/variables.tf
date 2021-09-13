@@ -1,19 +1,19 @@
 # VSPHERE AUTHENTICATION
 
-variable vcenter_server {
-  type = string
+variable "vcenter_server" {
+  type        = string
   description = "The vCenter server hostname, IP, or FQDN"
-  default = "vcsa.int.leakespeake.com"
+  default     = "vcsa.int.leakespeake.com"
 }
 
-variable vcenter_username {
-  type = string
+variable "vcenter_username" {
+  type        = string
   description = "The username for authenticating to vCenter"
-  default = "administrator@vsphere.local"
+  default     = "administrator@vsphere.local"
 }
 
-variable vcenter_password {
-  type = string
+variable "vcenter_password" {
+  type        = string
   description = "The password for authenticating to vCenter - no default set to allow for run time prompt"
 }
 
@@ -77,7 +77,7 @@ variable "memory" {
 }
 
 variable "nested_hv" {
-  type = bool  
+  type        = bool
   description = "Enable or disable nested virtualization in the guest"
   default     = true
 }
@@ -90,24 +90,24 @@ variable "domain" {
 }
 
 variable "ipv4" {
-  description = "The IP's to set for each VM - must exist within the var.network range - used with the count argument to calculate VM numbers"
-  type = list(string)
-  default = ["192.168.0.160"]
+  description = "The IP's to set for each VM - must exist within the var.network range. Used to calculate VM numbers via: count = length(var.ipv4)"
+  type        = list(string)
+  default     = ["192.168.0.160", "192.168.0.161"]
 }
 
 variable "ipv4_mask" {
   description = "The subnet mask of the ipv4 network"
-  default = "24"
+  default     = "24"
 }
 
 variable "ipv4_gateway" {
   description = "The default gateway of the ipv4 network"
-  default = "192.168.0.250"
+  default     = "192.168.0.250"
 }
 
 variable "dns_servers" {
   description = "Set DNS configuration"
-  type = list(string)
-  default = ["192.168.0.113", "194.168.4.100", "194.168.8.100"]
+  type        = list(string)
+  default     = ["192.168.0.113", "194.168.4.100", "194.168.8.100"]
 }
 
