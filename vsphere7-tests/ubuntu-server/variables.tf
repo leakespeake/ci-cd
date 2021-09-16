@@ -41,24 +41,17 @@ variable "network" {
 
 variable "template" {
   description = "The name of the template available on the selected vCenter server"
-  default     = "ubuntu-server-20-04-2-20210905T095306Z"
+  default     = "ubuntu-server-20-04-2-20210916T123123Z"
 }
 
 variable "folder" {
   description = "The path to the folder to put the VM in, relative to the datacenter that the resource pool is in"
-  default     = "Testing"
-}
-
-# RESOURCE VARIABLES
-
-variable "node_count" {
-  description = "The number of instances you want deploy from the template"
-  default     = 2
+  default     = "Packer-vms"
 }
 
 variable "vmname" {
   description = "The base name of the resulting VM(s)"
-  default     = "my-testvm"
+  default     = "test-vm"
 }
 
 variable "vmnamesuffix" {
@@ -92,7 +85,7 @@ variable "domain" {
 variable "ipv4" {
   description = "The IP's to set for each VM - must exist within the var.network range. Used to calculate VM numbers via: count = length(var.ipv4)"
   type        = list(string)
-  default     = ["192.168.0.160", "192.168.0.161"]
+  default     = ["192.168.0.160"]
 }
 
 variable "ipv4_mask" {
