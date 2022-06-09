@@ -8,7 +8,7 @@ Test purposes only - doesn't adhere to DRY principals.
 
 ## Versions
 
-- Terraform 1.0.6
-- vSphere 7.0.2
+- Terraform 1.2.2
+- vSphere 7.0.3
 
 ---
