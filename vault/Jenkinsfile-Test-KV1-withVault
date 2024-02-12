@@ -1,0 +1,40 @@
+// define the secrets and the environment variables they will be loaded to
+def secrets = [
+  [path: 'kv1/test', engineVersion: 1, secretValues: [
+    [envVar: 'test_kv1', vaultKey: 'mysecret']]],
+]
+
+// define the Vault server and Vault App Role Credential to authenticate with
+def configuration = [
+    vaultUrl: 'https://vault-prd-01.int.leakespeake.com:8200',  
+    vaultCredentialId: 'vault-jenkins-app-role', 
+    engineVersion: 1
+]
+                      
+pipeline {
+    agent any
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+        disableConcurrentBuilds()
+    }
+    stages{   
+      stage('Vault Echo Test') {
+        steps {
+          // inside this block your credentials will be available as environment variables
+          withVault([configuration: configuration, vaultSecrets: secrets]) {
+            sh "echo ${env.test_kv1}"
+          }
+        }  
+      }
+      stage('Vault Curl Test') {
+        steps {
+          // inside this block your credentials will be available as environment variables
+          withVault([configuration: configuration, vaultSecrets: secrets]) {
+            sh '''
+              curl -X POST -H "Content-Type: application/json" -H "X-Custom-Header: $test_kv1" https://vault-prd-01.int.leakespeake.com:8200  
+            '''
+          }
+        }  
+      }
+    }
+}
