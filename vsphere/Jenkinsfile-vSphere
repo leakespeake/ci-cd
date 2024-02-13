@@ -1,0 +1,88 @@
+pipeline {
+    agent any
+
+    tools {
+        "org.jenkinsci.plugins.terraform.TerraformInstallation" "terraform"
+    }
+
+    parameters {
+        booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?')
+    } 
+    
+    environment {
+        TF_HOME = tool('terraform')
+        TF_IN_AUTOMATION = "TRUE"
+        TF_INPUT = "FALSE"
+        TF_LOG = "WARN"
+        PATH = "$TF_HOME:$PATH"
+        //VCENTER_USERNAME = credentials('AWS_ACCESS_KEY_ID')
+        //VCENTER_PASSWORD = credentials('AWS_SECRET_ACCESS_KEY')
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                 script{
+                        dir("modules/vsphere/jenkins-pipeline")
+                        {
+                            git "https://github.com/leakespeake/terraform-projects.git"
+                        }
+                    }
+                }
+            }
+        stage('Init') {
+            steps {
+                dir("modules/vsphere/jenkins-pipeline")
+                {
+                    sh "terraform init"
+                    sh "terraform version"
+                    sh "echo \$PWD"
+                    sh "whoami"                    
+                }
+            }
+        }     
+        stage('Format') {
+            steps {            
+                dir('modules/vsphere/jenkins-pipeline'){
+                    sh "terraform fmt -list=true -write=false -diff=true -check=true"
+                }
+            }
+        }               
+        stage('Validate') {
+            steps {
+                dir('modules/vsphere/jenkins-pipeline'){
+                    sh "terraform validate"
+                }
+            }
+        }
+        stage('Plan') {
+            steps {
+                dir('modules/vsphere/jenkins-pipeline'){
+                    sh "terraform plan -out tfplan"
+                    sh "terraform show -no-color tfplan > tfplan.txt"
+                }
+            }
+        }
+        stage('Approval') {
+            when {
+                not {
+                    equals expected: true, actual: params.autoApprove
+                }
+            }
+           steps {
+                dir('modules/vsphere/jenkins-pipeline'){
+                    script {
+                        def plan = readFile "tfplan.txt"
+                        input message: "Do you want to apply the Terraform plan?",
+                        parameters: [text(name: 'Plan', description: 'Please review the Terraform plan', defaultValue: plan)]
+                    }
+                }
+            }
+        }    
+        stage('Apply') {
+            steps {
+                sh "terraform apply tfplan.txt"
+            }
+        }
+    }
+}   

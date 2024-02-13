@@ -1,6 +1,3 @@
-// https://github.com/techmatlock/terraform-jenkins-vsphere-vm/tree/master
-// https://austincloud.guru/2020/03/12/using-vault-with-jenkins/
-// https://github.com/jenkinsci/hashicorp-vault-plugin/issues/147
 pipeline {
     agent any
 
@@ -15,7 +12,7 @@ pipeline {
     environment {
         TF_HOME = tool('terraform')
         TF_IN_AUTOMATION = "TRUE"
-        TF_INPUT = FALSE
+        TF_INPUT = "FALSE"
         TF_LOG = "WARN"
         PATH = "$TF_HOME:$PATH"
         //VCENTER_USERNAME = credentials('AWS_ACCESS_KEY_ID')
@@ -45,6 +42,7 @@ pipeline {
             }
         }     
         stage('Format') {
+            steps {            
                 dir('modules/vsphere/jenkins-pipeline'){
                     sh "terraform fmt -list=true -write=false -diff=true -check=true"
                 }
@@ -87,4 +85,4 @@ pipeline {
             }
         }
     }
-}    
+}   
